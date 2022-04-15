@@ -1,2 +1,3 @@
-# 1point3acres
-1Point3Acres handy scripts.
+# 1Point3Acres
+
+YOU KNOW HOW TO USE IT IF YOU KNOW WHAT IT IS.
