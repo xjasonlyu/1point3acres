@@ -72,10 +72,12 @@ def telegram_send_message(text: str, chat_id: str, token: str, silent: bool = Fa
 
 def main(do):
 
-    headers = retrieve_headers_from_curl('CURL_1P3A')
-    headers.update(Host=API_HOST)
-
-    message_text = do(headers)
+    try:
+        headers = retrieve_headers_from_curl('CURL_1P3A')
+        headers.update(Host=API_HOST)
+        message_text = do(headers)
+    except Exception as e:
+        message_text = str(e)
 
     # log to output
     print(message_text)
