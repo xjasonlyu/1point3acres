@@ -101,9 +101,9 @@ if __name__ == '__main__':
         # do all
         main(do_checkin)
         main(do_daily_questions)
-    elif sys.argv[1] == '1':
+    elif sys.argv[1] in ('1', 'checkin'):
         main(do_checkin)
-    elif sys.argv[1] == '2':
+    elif sys.argv[1] in ('2', 'question'):
         main(do_daily_questions)
     else:
         print("unknown command")
