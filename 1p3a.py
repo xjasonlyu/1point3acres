@@ -19,7 +19,7 @@ def do_checkin(headers: dict) -> str:
             }
             print('emotion for today:', emotion)
 
-        with session.post(url=f'https://{API_HOST}/api/users/checkin', headers=headers, data=emotion) as r:
+        with session.post(url=f'https://{API_HOST}/api/users/checkin', headers=headers, json=emotion) as r:
             return r.json()['msg']
 
 
@@ -49,7 +49,7 @@ def do_daily_questions(headers: dict) -> str:
                 return '未找到匹配答案，请手动答题'
             print('answer for today:', ans)
 
-        with session.post(url=f'https://{API_HOST}/api/daily_questions', headers=headers, data=ans) as r:
+        with session.post(url=f'https://{API_HOST}/api/daily_questions', headers=headers, json=ans) as r:
             return r.json()['msg']
 
 
