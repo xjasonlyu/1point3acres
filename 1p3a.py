@@ -93,7 +93,7 @@ def main(do):
     print(message_text)
 
     # telegram notify
-    push_notification('1Point3Acres', message_text)
+    push_notification(f'1Point3Acres {do.__name__}', message_text)
 
 
 if __name__ == '__main__':
@@ -102,9 +102,8 @@ if __name__ == '__main__':
         main(do_checkin)
         main(do_daily_questions)
     elif sys.argv[1] == '1':
-        do = do_checkin
+        main(do_checkin)
     elif sys.argv[1] == '2':
-        do = do_daily_questions
+        main(do_daily_questions)
     else:
-        def do(_): return "unknown command"
-    main(do)
+        print("unknown command")
