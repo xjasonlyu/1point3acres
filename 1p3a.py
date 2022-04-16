@@ -58,16 +58,26 @@ def retrieve_headers_from_curl(env: str) -> dict:
     return uncurl.parse_context(curl_command=cURL).headers
 
 
-def telegram_send_message(text: str, chat_id: str, token: str, silent: bool = False):
-    with requests.post(url=f'https://api.telegram.org/bot{token}/sendMessage',
-                       json={
-                           'chat_id': chat_id,
-                           'text': text,
-                           'parse_mode': 'HTML',
-                           'disable_notification': silent,
-                       }) as r:
-        r.raise_for_status()
-        return r.json()
+def push_notification(title: str, content: str) -> None:
+
+    def telegram_send_message(text: str, chat_id: str, token: str, silent: bool = False) -> None:
+        with requests.post(url=f'https://api.telegram.org/bot{token}/sendMessage',
+                           json={
+                               'chat_id': chat_id,
+                               'text': text,
+                               'disable_notification': silent,
+                               'disable_web_page_preview': True,
+                           }) as r:
+            r.raise_for_status()
+
+    try:
+        from notify import telegram_bot
+        telegram_bot(title, content)
+    except ImportError:
+        chat_id = os.getenv('TG_USER_ID')
+        bot_token = os.getenv('TG_BOT_TOKEN')
+        if chat_id and bot_token:
+            telegram_send_message(f'{title}\n\n{content}', chat_id, bot_token)
 
 
 def main(do):
@@ -83,16 +93,14 @@ def main(do):
     print(message_text)
 
     # telegram notify
-    chat_id = os.getenv('TG_USER_ID')
-    bot_token = os.getenv('TG_BOT_TOKEN')
-    if chat_id and bot_token:
-        telegram_send_message(message_text, chat_id, bot_token, silent=(
-            True if '成功' in message_text else False))
+    push_notification('1Point3Acres', message_text)
 
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        def do(_): return "wrong usage"
+        # do all
+        main(do_checkin)
+        main(do_daily_questions)
     elif sys.argv[1] == '1':
         do = do_checkin
     elif sys.argv[1] == '2':
