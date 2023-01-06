@@ -25,7 +25,7 @@ jobs:
           random: 'true'
   checkin:
     runs-on: ubuntu-latest
-    depends-on: sleep
+    needs: sleep
     steps:
 
     - uses: actions/checkout@v3
