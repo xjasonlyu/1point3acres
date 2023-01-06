@@ -55,6 +55,9 @@ def do_daily_questions(headers: dict) -> str:
 
 def retrieve_headers_from_curl(env: str) -> dict:
     cURL = os.getenv(env, '').replace('\\', ' ')
+    if not cURL:
+        print(f'请在环境变量中设置 {env}，值为 包含app请求cookie的curl命令')
+        sys.exit(-1)
     return uncurl.parse_context(curl_command=cURL).headers
 
 
