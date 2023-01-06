@@ -8,15 +8,26 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  schedule:
+    - cron: '0 10 * * *'
 
 permissions:
   contents: read
 
 jobs:
+  sleep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait
+        uses: 1itachi/sleep-random@v1.0.0
+        with:
+          minutes: '350'
+          random: 'true'
   checkin:
     runs-on: ubuntu-latest
-
+    depends-on: sleep
     steps:
+
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
