@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build:
-
+    environment: checkin
     runs-on: ubuntu-latest
 
     steps:
