@@ -13,9 +13,9 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    environment: checkin
+  checkin:
     runs-on: ubuntu-latest
+#    environment: checkin
 
     steps:
     - uses: actions/checkout@v3
