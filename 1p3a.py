@@ -4,10 +4,10 @@ import re
 import random
 import uncurl
 import requests
-
+import json
 
 API_HOST = 'api.1point3acres.com'
-
+checkins = json.load(open('checkin.json', encoding='utf-8'))
 
 def do_checkin(headers: dict) -> str:
     with requests.Session() as session:
@@ -15,7 +15,7 @@ def do_checkin(headers: dict) -> str:
         with session.get(url=f'https://{API_HOST}/api/users/checkin', headers=headers) as r:
             emotion = {
                 'qdxq': random.choice(r.json()['emotion'])['qdxq'],
-                'todaysay': ''.join(chr(random.randint(0x4E00, 0x9FBF)) for _ in range(random.randint(5, 10))),
+                'todaysay': random.choice(checkins),
             }
             print('emotion for today:', emotion)
 
