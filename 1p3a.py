@@ -46,6 +46,7 @@ def do_daily_questions(headers: dict) -> str:
         with session.get(url=f'https://{API_HOST}/api/daily_questions', headers=headers) as r:
             ans = compose_ans(r.json()['question'])
             if not ans['answer']:
+                print('unknown question', r.json())
                 return '未找到匹配答案，请手动答题'
             print('answer for today:', ans)
 
