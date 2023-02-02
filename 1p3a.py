@@ -4,6 +4,7 @@ import re
 import random
 import uncurl
 import requests
+import time
 import json
 
 API_HOST = 'api.1point3acres.com'
@@ -104,6 +105,9 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         # do all
         main(do_checkin)
+        time_sleep = random.randint(10, 30)
+        print('sleep for {} seconds'.format(time_sleep))
+        time.sleep(time_sleep)
         main(do_daily_questions)
     elif sys.argv[1] in ('1', 'checkin'):
         main(do_checkin)
