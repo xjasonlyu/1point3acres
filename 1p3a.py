@@ -4,10 +4,11 @@ import re
 import random
 import uncurl
 import requests
-
+import time
+import json
 
 API_HOST = 'api.1point3acres.com'
-
+checkins = json.load(open('checkin.json', encoding='utf-8'))
 
 def do_checkin(headers: dict) -> str:
     with requests.Session() as session:
@@ -15,7 +16,7 @@ def do_checkin(headers: dict) -> str:
         with session.get(url=f'https://{API_HOST}/api/users/checkin', headers=headers) as r:
             emotion = {
                 'qdxq': random.choice(r.json()['emotion'])['qdxq'],
-                'todaysay': ''.join(chr(random.randint(0x4E00, 0x9FBF)) for _ in range(random.randint(5, 10))),
+                'todaysay': random.choice(checkins),
             }
             print('emotion for today:', emotion)
 
@@ -46,7 +47,8 @@ def do_daily_questions(headers: dict) -> str:
         with session.get(url=f'https://{API_HOST}/api/daily_questions', headers=headers) as r:
             ans = compose_ans(r.json()['question'])
             if not ans['answer']:
-                return '未找到匹配答案，请手动答题'
+                print('未找到匹配答案，请手动答题', r.json())
+                sys.exit(-1)
             print('answer for today:', ans)
 
         with session.post(url=f'https://{API_HOST}/api/daily_questions', headers=headers, json=ans) as r:
@@ -55,6 +57,9 @@ def do_daily_questions(headers: dict) -> str:
 
 def retrieve_headers_from_curl(env: str) -> dict:
     cURL = os.getenv(env, '').replace('\\', ' ')
+    if not cURL:
+        print(f'请在环境变量中设置 {env}，值为 包含app请求cookie的curl命令')
+        sys.exit(-1)
     return uncurl.parse_context(curl_command=cURL).headers
 
 
@@ -100,6 +105,9 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         # do all
         main(do_checkin)
+        time_sleep = random.randint(10, 30)
+        print('sleep for {} seconds'.format(time_sleep))
+        time.sleep(time_sleep)
         main(do_daily_questions)
     elif sys.argv[1] in ('1', 'checkin'):
         main(do_checkin)
